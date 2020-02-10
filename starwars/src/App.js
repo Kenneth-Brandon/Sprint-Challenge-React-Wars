@@ -13,6 +13,10 @@ const StyledApp = styled.div`
   margin: 0 auto;
 `;
 
+const Title = styled.h1`
+  font-size: 5rem;
+`;
+
 const StyledButtonContainer = styled.div`
   margin: 25px auto;
   text-align: center;
@@ -58,7 +62,7 @@ const App = () => {
 
   return (
     <StyledApp className="App">
-      <h1 className="Header">React Wars</h1>
+      <Title className="Header">React Wars</Title>
       <StyledButtonContainer>
         <PaginationButton
           text="Next"
