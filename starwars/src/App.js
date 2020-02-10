@@ -14,7 +14,7 @@ const StyledApp = styled.div`
 `;
 
 const StyledButtonContainer = styled.div`
-  margin: 0 auto;
+  margin: 25px auto;
   text-align: center;
 `;
 
@@ -67,6 +67,8 @@ const App = () => {
             getCharacters(nextPageUrl);
           }}
         />
+      </StyledButtonContainer>
+      <StyledButtonContainer>
         <PaginationButton
           text="Previous"
           url={previousPageUrl}
