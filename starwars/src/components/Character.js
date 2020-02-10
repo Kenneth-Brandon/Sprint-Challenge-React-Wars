@@ -1,18 +1,31 @@
 import React from "react";
 import styled from "styled-components";
 
-const Character = props => {
+const StyledCharacter = styled.div`
+  background-color: #ffffff;
+  padding: 15px 50px;
+  margin: 20px 10px;
+  border-radius: 10%;
+  flex-basis: 20%;
+`;
+
+const H2 = styled.h2`
+  margin: 0 auto;
+  font-size: 1.8rem;
+`;
+
+const Character = ({ characterData }) => {
   return (
     <StyledCharacter>
-      <h2>Name: {props.name}</h2>
-      <p>Birth Year: {props.birth_year}</p>
-      <p>Gender: {props.gender}</p>
-      <p>Hair Color: {props.hair_color}</p>
-      <p>Eye Color: {props.eye_color}</p>
-      <p>Mass: {props.mass}kg</p>
-      <p>Height: {props.height}cm</p>
-      <p>Skin Color: {props.skin_color}</p>
-      <p>Number of Film Appearances: {props.films.length}</p>
+      <H2>Name: {characterData.name}</H2>
+      <p>Birth Year: {characterData.birth_year}</p>
+      <p>Gender: {characterData.gender}</p>
+      <p>Hair Color: {characterData.hair_color}</p>
+      <p>Eye Color: {characterData.eye_color}</p>
+      <p>Mass: {characterData.mass}kg</p>
+      <p>Height: {characterData.height}cm</p>
+      <p>Skin Color: {characterData.skin_color}</p>
+      <p>Number of Film Appearances: {characterData.films.length}</p>
     </StyledCharacter>
   );
 };

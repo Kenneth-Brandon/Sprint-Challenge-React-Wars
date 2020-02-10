@@ -8,11 +8,29 @@ import Character from "./components/Character";
 import PaginationButton from "./components/PaginationButton";
 import Search from "./components/Search";
 
-const App = props => {
+const StyledApp = styled.div`
+  width: 80%;
+  margin: 0 auto;
+`;
+
+const StyledButtonContainer = styled.div`
+  margin: 0 auto;
+  text-align: center;
+`;
+
+const StyledCharacterContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`;
+
+const App = () => {
   const [characters, setCharacters] = useState([]);
   const [nextPageUrl, setNextPageUrl] = useState();
   const [previousPageUrl, setPreviousPageUrl] = useState();
   const [search, setSearch] = useState("");
+
+  const initialCharactersUrl = `https://swapi.co/api/people`;
 
   function getCharacters(characterUrl) {
     axios.get(characterUrl).then(response => {
@@ -28,11 +46,9 @@ const App = props => {
     });
   }
 
-  const initialCharactersUrl = `https://swapi.co/api/people`;
-
   useEffect(() => {
     getCharacters(initialCharactersUrl);
-  }, []);
+  }, [initialCharactersUrl]);
 
   if (!characters) return <h1>Loading</h1>;
 
@@ -45,23 +61,23 @@ const App = props => {
       <h1 className="Header">React Wars</h1>
       <StyledButtonContainer>
         <PaginationButton
-          text="Previous"
-          url={previousPageUrl}
-          callback={() => getCharacters(previousPageUrl)}
-        />
-        <PaginationButton
           text="Next"
           url={nextPageUrl}
           callback={() => {
             getCharacters(nextPageUrl);
           }}
         />
+        <PaginationButton
+          text="Previous"
+          url={previousPageUrl}
+          callback={() => getCharacters(previousPageUrl)}
+        />
         <Search search={search} setSearch={setSearch} />
       </StyledButtonContainer>
       <StyledCharacterContainer>
-        {filteredCharacters.map(character => {
-          <Character key={character.url} characterData={character} />;
-        })}
+        {filteredCharacters.map(character => (
+          <Character key={character.url} characterData={character} />
+        ))}
       </StyledCharacterContainer>
     </StyledApp>
   );
