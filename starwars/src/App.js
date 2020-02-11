@@ -1,19 +1,92 @@
-import React from 'react';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+import styled from "styled-components";
+import "./App.css";
+
+import Character from "./components/Character";
+import PaginationButton from "./components/PaginationButton";
+import Search from "./components/Search";
+
+const StyledApp = styled.div`
+  width: 80%;
+  margin: 0 auto;
+`;
+
+const Title = styled.h1`
+  font-size: 5rem;
+`;
+
+const StyledButtonContainer = styled.div`
+  margin: 25px auto;
+  text-align: center;
+`;
+
+const StyledCharacterContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`;
 
 const App = () => {
-  // Try to think through what state you'll need for this app before starting. Then build out
-  // the state properties here.
+  const [characters, setCharacters] = useState([]);
+  const [nextPageUrl, setNextPageUrl] = useState();
+  const [previousPageUrl, setPreviousPageUrl] = useState();
+  const [search, setSearch] = useState("");
 
-  // Fetch characters from the star wars api in an effect hook. Remember, anytime you have a 
-  // side effect in a component, you want to think about which state and/or props it should
-  // sync up with, if any.
+  const initialCharactersUrl = `https://swapi.co/api/people`;
+
+  function getCharacters(characterUrl) {
+    axios.get(characterUrl).then(response => {
+      console.log(response.data);
+      setNextPageUrl(response.data.next);
+      setPreviousPageUrl(response.data.previous);
+      setCharacters(response.data.results);
+      console.log(
+        "Pagination Urls: ",
+        response.data.next,
+        response.data.previous
+      );
+    });
+  }
+
+  useEffect(() => {
+    getCharacters(initialCharactersUrl);
+  }, [initialCharactersUrl]);
+
+  if (!characters) return <h1>Loading</h1>;
+
+  const filteredCharacters = characters.filter(character => {
+    return character.name.toLowerCase().indexOf(search.toLowerCase()) !== -1;
+  });
 
   return (
-    <div className="App">
-      <h1 className="Header">React Wars</h1>
-    </div>
+    <StyledApp className="App">
+      <Title className="Header">React Wars</Title>
+      <StyledButtonContainer>
+        <PaginationButton
+          text="Next"
+          url={nextPageUrl}
+          callback={() => {
+            getCharacters(nextPageUrl);
+          }}
+        />
+      </StyledButtonContainer>
+      <StyledButtonContainer>
+        <PaginationButton
+          text="Previous"
+          url={previousPageUrl}
+          callback={() => getCharacters(previousPageUrl)}
+        />
+        <Search search={search} setSearch={setSearch} />
+      </StyledButtonContainer>
+      <StyledCharacterContainer>
+        {filteredCharacters.map(character => (
+          <Character key={character.url} characterData={character} />
+        ))}
+      </StyledCharacterContainer>
+    </StyledApp>
   );
-}
+};
 
 export default App;
